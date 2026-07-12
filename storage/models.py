@@ -16,6 +16,7 @@ class BookModel(Base):
     title: Mapped[str] = mapped_column(
         String(300),
         nullable=False,
+        unique=True,
     )
 
     price: Mapped[float] = mapped_column(

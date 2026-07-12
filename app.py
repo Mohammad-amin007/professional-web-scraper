@@ -6,6 +6,7 @@ import storage.models
 
 from scrapers.example_scraper import ExampleScraper
 from services.storage_service import StorageService
+from services.book_service import BookService
 
 
 async def main():
@@ -22,15 +23,33 @@ async def main():
     print(f"Extracted books: {len(books)}")
 
 
-    # Save data
+    # Database session
     async with AsyncSessionLocal() as session:
 
         storage = StorageService(session)
 
         await storage.save_books(books)
 
+        print("Books saved successfully")
 
-    print("Books saved successfully")
+
+        book_service = BookService(session)
+
+        all_books = await book_service.get_all_books()
+
+        print(
+            f"Database books: {len(all_books)}"
+        )
+
+        for book in all_books[:5]:
+            print(
+                book.title,
+                book.price
+            )
+
+
+    # Close database connections
+    await engine.dispose()
 
 
 if __name__ == "__main__":
