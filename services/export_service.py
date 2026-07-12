@@ -3,11 +3,17 @@ from pathlib import Path
 
 import pandas as pd
 
+from utils.logger import logger
+
 
 class ExportService:
 
     def __init__(self, export_folder="exports"):
-        self.export_folder = Path(export_folder)
+
+        self.export_folder = Path(
+            export_folder
+        )
+
         self.export_folder.mkdir(
             exist_ok=True
         )
@@ -15,55 +21,113 @@ class ExportService:
 
     def export_csv(self, books):
 
-        file_path = self.export_folder / "books.csv"
+        file_path = (
+            self.export_folder /
+            "books.csv"
+        )
 
-        with open(
-            file_path,
-            "w",
-            newline="",
-            encoding="utf-8"
-        ) as file:
+        logger.info(
+            f"Starting CSV export. Records: {len(books)}"
+        )
 
-            writer = csv.writer(file)
 
-            writer.writerow(
-                [
-                    "Title",
-                    "Price"
-                ]
-            )
+        try:
 
-            for book in books:
+            with open(
+                file_path,
+                "w",
+                newline="",
+                encoding="utf-8"
+            ) as file:
+
+                writer = csv.writer(file)
+
                 writer.writerow(
                     [
-                        book.title,
-                        book.price
+                        "Title",
+                        "Price"
                     ]
                 )
 
-        return file_path
+
+                for book in books:
+
+                    writer.writerow(
+                        [
+                            book.title,
+                            book.price
+                        ]
+                    )
+
+
+            logger.info(
+                f"CSV exported successfully: {file_path}"
+            )
+
+
+            return file_path
+
+
+        except Exception:
+
+            logger.exception(
+                "CSV export failed."
+            )
+
+            raise
+
 
 
     def export_excel(self, books):
 
-        file_path = self.export_folder / "books.xlsx"
+        file_path = (
+            self.export_folder /
+            "books.xlsx"
+        )
 
-        data = []
+        logger.info(
+            f"Starting Excel export. Records: {len(books)}"
+        )
 
-        for book in books:
-            data.append(
-                {
-                    "Title": book.title,
-                    "Price": book.price
-                }
+
+        try:
+
+            data = []
+
+
+            for book in books:
+
+                data.append(
+                    {
+                        "Title": book.title,
+                        "Price": book.price
+                    }
+                )
+
+
+            dataframe = pd.DataFrame(
+                data
             )
 
 
-        dataframe = pd.DataFrame(data)
+            dataframe.to_excel(
+                file_path,
+                index=False
+            )
 
-        dataframe.to_excel(
-            file_path,
-            index=False
-        )
 
-        return file_path
+            logger.info(
+                f"Excel exported successfully: {file_path}"
+            )
+
+
+            return file_path
+
+
+        except Exception:
+
+            logger.exception(
+                "Excel export failed."
+            )
+
+            raise

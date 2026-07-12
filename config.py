@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).parent
 
 @dataclass(frozen=True)
 class ScraperConfig:
-    BASE_URL: str = ""
+    BASE_URL: str = "https://books.toscrape.com/"
     TIMEOUT: int = 15
     RETRY_COUNT: int = 3
 

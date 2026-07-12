@@ -4,6 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from models.book import Book
 from storage.models import BookModel
 
+from utils.logger import logger
+
 
 class StorageService:
 
@@ -11,34 +13,88 @@ class StorageService:
         self.session = session
 
 
-    async def save_or_update_book(self, book: Book):
+    async def save_or_update_book(
+        self,
+        book: Book
+    ):
 
-        result = await self.session.execute(
-            select(BookModel).where(
-                BookModel.title == book.title
+        try:
+
+            result = await self.session.execute(
+                select(BookModel).where(
+                    BookModel.title == book.title
+                )
             )
+
+            existing_book = result.scalar_one_or_none()
+
+
+            if existing_book:
+
+                existing_book.price = book.price
+
+                logger.info(
+                    f"Updated book: {book.title}"
+                )
+
+
+            else:
+
+                new_book = BookModel(
+                    title=book.title,
+                    price=book.price
+                )
+
+                self.session.add(new_book)
+
+                logger.info(
+                    f"Inserted book: {book.title}"
+                )
+
+
+        except Exception:
+
+            logger.exception(
+                f"Failed saving book: {book.title}"
+            )
+
+            raise
+
+
+
+    async def save_books(
+        self,
+        books: list[Book]
+    ):
+
+        logger.info(
+            f"Saving {len(books)} books to database."
         )
 
-        existing_book = result.scalar_one_or_none()
+
+        try:
+
+            for book in books:
+
+                await self.save_or_update_book(
+                    book
+                )
 
 
-        if existing_book:
-            # Update existing record
-            existing_book.price = book.price
+            await self.session.commit()
 
-        else:
-            # Insert new record
-            new_book = BookModel(
-                title=book.title,
-                price=book.price
+
+            logger.info(
+                "Database commit completed successfully."
             )
 
-            self.session.add(new_book)
 
+        except Exception:
 
-    async def save_books(self, books: list[Book]):
+            await self.session.rollback()
 
-        for book in books:
-            await self.save_or_update_book(book)
+            logger.exception(
+                "Database save failed."
+            )
 
-        await self.session.commit()
+            raise
