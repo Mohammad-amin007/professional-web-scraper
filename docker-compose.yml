@@ -1,0 +1,26 @@
+services:
+
+  scraper-app:
+
+    build:
+      context: .
+
+    container_name: professional-web-scraper
+
+
+    env_file:
+      - .env
+
+
+    volumes:
+      - ./storage:/app/storage
+      - ./logs:/app/logs
+      - ./exports:/app/exports
+
+
+    environment:
+      PYTHONUNBUFFERED: 1
+
+
+    command:
+      python app.py

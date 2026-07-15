@@ -1,0 +1,32 @@
+id="1p7b3n"
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+
+# Environment files
+.env
+
+# Git
+.git/
+.gitignore
+
+# Logs
+logs/
+*.log
+
+# Test cache
+.pytest_cache/
+
+# Database files
+*.db
+
+# Export files
+exports/
+
+# IDE files
+.vscode/
+.idea/

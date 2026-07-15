@@ -9,9 +9,19 @@ from sqlalchemy.orm import DeclarativeBase
 from config import StorageConfig
 
 
+
+# Ensure database folder exists
+StorageConfig.DATABASE.parent.mkdir(
+    parents=True,
+    exist_ok=True
+)
+
+
+
 DATABASE_URL = (
     f"sqlite+aiosqlite:///{StorageConfig.DATABASE}"
 )
+
 
 
 engine = create_async_engine(
@@ -20,11 +30,13 @@ engine = create_async_engine(
 )
 
 
+
 AsyncSessionLocal = async_sessionmaker(
     engine,
     expire_on_commit=False,
     class_=AsyncSession,
 )
+
 
 
 class Base(DeclarativeBase):

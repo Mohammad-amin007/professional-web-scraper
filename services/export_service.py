@@ -3,28 +3,37 @@ from pathlib import Path
 
 import pandas as pd
 
+from config import StorageConfig
 from utils.logger import logger
+
 
 
 class ExportService:
 
-    def __init__(self, export_folder="exports"):
+
+    def __init__(self):
 
         self.export_folder = Path(
-            export_folder
+            StorageConfig.EXPORT_FOLDER
         )
 
         self.export_folder.mkdir(
+            parents=True,
             exist_ok=True
         )
 
 
-    def export_csv(self, books):
+
+    def export_csv(
+        self,
+        books
+    ):
 
         file_path = (
             self.export_folder /
             "books.csv"
         )
+
 
         logger.info(
             f"Starting CSV export. Records: {len(books)}"
@@ -40,7 +49,9 @@ class ExportService:
                 encoding="utf-8"
             ) as file:
 
+
                 writer = csv.writer(file)
+
 
                 writer.writerow(
                     [
@@ -68,6 +79,7 @@ class ExportService:
             return file_path
 
 
+
         except Exception:
 
             logger.exception(
@@ -78,12 +90,18 @@ class ExportService:
 
 
 
-    def export_excel(self, books):
+
+    def export_excel(
+        self,
+        books
+    ):
+
 
         file_path = (
             self.export_folder /
             "books.xlsx"
         )
+
 
         logger.info(
             f"Starting Excel export. Records: {len(books)}"
@@ -122,6 +140,7 @@ class ExportService:
 
 
             return file_path
+
 
 
         except Exception:
