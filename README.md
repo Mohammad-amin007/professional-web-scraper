@@ -1,62 +1,232 @@
 # 🚀 Professional Web Scraper
 
-A production-ready web scraping template built with Python.
+A production-style web scraping and data processing pipeline built with Python.
 
-This project demonstrates how to build a scalable, maintainable, and extensible web scraper using modern Python development practices.
-
-It is designed as a reusable template for scraping different websites by simply implementing new scraper classes.
+This project demonstrates how to build a scalable, maintainable, and reusable scraper system with structured data extraction, database storage, analytics, and multiple export formats.
 
 ---
 
-## ✨ Features
+## 📌 Overview
 
-- ✅ Clean Architecture
-- ✅ Object-Oriented Design
-- ✅ Async SQLAlchemy
-- ✅ SQLite Database
-- ✅ Docker Support
+Professional Web Scraper is a modular scraping framework designed to extract product data from websites and process it through a complete data pipeline.
+
+The project includes:
+
+- Multi-page scraping
+- Structured data extraction
+- Async database storage
+- Data analytics
+- CSV / Excel / JSON export
+- CLI interface
+- Automated testing
+- Docker support
+
+The architecture is designed to be reusable. New websites can be supported by creating new scraper implementations without changing the core pipeline.
+
+---
+
+# ✨ Features
+
+## Web Scraping
+
+- ✅ Multi-page crawling with pagination support
+- ✅ HTML parsing with BeautifulSoup
+- ✅ Product information extraction
+- ✅ Retry mechanism
+- ✅ Timeout handling
+- ✅ Custom User-Agent support
+- ✅ Modular scraper architecture
+
+
+## Data Processing
+
+- ✅ Structured data models
+- ✅ Async SQLAlchemy integration
+- ✅ SQLite database storage
+- ✅ Duplicate prevention using product URL
+- ✅ Analytics generation
+
+
+## Export
+
+- ✅ CSV export
+- ✅ Excel export
+- ✅ JSON export
+
+
+## Development
+
+- ✅ Clean architecture
+- ✅ Environment configuration
+- ✅ Logging system
+- ✅ CLI commands
+- ✅ Docker support
 - ✅ Docker Compose
-- ✅ CLI Commands
-- ✅ Scheduler
-- ✅ HTTP Client with Retry
-- ✅ Logging
-- ✅ CSV Export
-- ✅ Excel Export
-- ✅ Environment Variables
-- ✅ Unit Tests
-- ✅ Production Ready Structure
-## 📦 Installation
+- ✅ Automated tests
 
-Clone the repository:
+---
 
-```bash
-git clone https://github.com/yourusername/professional-web-scraper.git
+# 🏗 Architecture
+
+The project follows a layered architecture:
+
+```
+CLI
+ |
+ v
+Application Pipeline
+ |
+ v
+Scraper Layer
+ |
+ v
+Parser Layer
+ |
+ v
+Storage Service
+ |
+ v
+Database
+ |
+ +----------------+
+ |                |
+ v                v
+Analytics       Export
+                 |
+                 +--> CSV
+                 +--> Excel
+                 +--> JSON
 ```
 
-Move into the project:
+---
 
-```bash
-cd professional-web-scraper
+# 🔄 Data Pipeline
+
+```
+Website
+   |
+   v
+HTTP Client
+   |
+   v
+Scraper
+   |
+   v
+Parser
+   |
+   v
+Book Model
+   |
+   v
+Database Storage
+   |
+   +----------------+
+   |                |
+   v                v
+Analytics        Export
 ```
 
-Create a virtual environment:
+---
+
+# 📊 Extracted Data
+
+Each product contains:
+
+```json
+{
+    "title": "A Light in the Attic",
+    "price": 51.77,
+    "availability": "In stock",
+    "rating": 3,
+    "product_url": "https://books.toscrape.com/..."
+}
+```
+
+---
+
+# 🛠 Technologies
+
+- Python 3.14
+- BeautifulSoup4
+- Requests
+- SQLAlchemy 2
+- SQLite
+- Pandas
+- OpenPyXL
+- APScheduler
+- Pytest
+- Docker
+- Docker Compose
+
+---
+
+# 📂 Project Structure
+
+```
+Professional-Web-Scraper/
+
+├── app.py
+├── cli.py
+├── config.py
+├── database.py
+├── scheduler_runner.py
+
+├── scrapers/
+│   ├── base_scraper.py
+│   └── example_scraper.py
+
+├── services/
+│   ├── http_client.py
+│   ├── storage_service.py
+│   ├── export_service.py
+│   ├── analytics_service.py
+│   ├── book_service.py
+│   └── cli_service.py
+
+├── models/
+│   └── book.py
+
+├── storage/
+│   └── models.py
+
+├── tests/
+
+├── exports/
+
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# ⚙️ Installation
+
+Clone repository:
+
+```bash
+git clone https://github.com/Mohammad-amin007/professional-web-scraper.git
+```
+
+Move into project:
+
+```bash
+cd Professional-Web-Scraper
+```
+
+Create virtual environment:
 
 ```bash
 python -m venv .venv
 ```
 
-Activate it:
+Activate environment:
 
 ### Windows
 
 ```bash
 .venv\Scripts\activate
-```
-
-### Linux / macOS
-
-```bash
-source .venv/bin/activate
 ```
 
 Install dependencies:
@@ -67,11 +237,11 @@ pip install -r requirements.txt
 
 ---
 
-## ⚙️ Configuration
+# 🔧 Configuration
 
 Create a `.env` file:
 
-```text
+```env
 SCRAPER_BASE_URL=https://books.toscrape.com/
 
 SCRAPER_TIMEOUT=15
@@ -83,48 +253,85 @@ LOG_LEVEL=INFO
 
 ---
 
-## ▶️ Quick Start
+# ▶️ Usage
 
-Run the scraper:
+## Run Full Scraper Pipeline
 
 ```bash
 python cli.py scrape
 ```
 
-Show analytics:
+This will:
+
+1. Crawl all pages
+2. Extract product data
+3. Store records in database
+4. Run analytics
+5. Generate exports
+
+
+---
+
+## Show Analytics
 
 ```bash
 python cli.py analytics
 ```
 
-Export data:
+Example:
+
+```
+Total books: 1000
+Average price: £35.07
+
+Most expensive:
+The Perfect Play (£59.99)
+
+Cheapest:
+An Abundance of Katherines (£10.00)
+```
+
+---
+
+## Export Data
 
 ```bash
 python cli.py export
 ```
+
+Generated files:
+
+```
+exports/
+
+├── books.csv
+├── books.xlsx
+└── books.json
+```
+
 ---
 
-## 🐳 Running with Docker
+# 🐳 Docker
 
-Build the container:
+Build container:
 
 ```bash
 docker compose build
 ```
 
-Run the application:
+Run:
 
 ```bash
 docker compose up
 ```
 
-Run in detached mode:
+Run in background:
 
 ```bash
 docker compose up -d
 ```
 
-Stop containers:
+Stop:
 
 ```bash
 docker compose down
@@ -132,156 +339,76 @@ docker compose down
 
 ---
 
-## 📁 Project Structure
+# 🧪 Testing
 
-```text
-Professional-Web-Scraper
-│
-├── app.py
-├── cli.py
-├── scheduler_runner.py
-├── config.py
-├── database.py
-│
-├── scrapers/
-│   ├── base_scraper.py
-│   └── example_scraper.py
-│
-├── services/
-│   ├── analytics_service.py
-│   ├── book_service.py
-│   ├── cli_service.py
-│   ├── export_service.py
-│   └── storage_service.py
-│
-├── storage/
-│   ├── models.py
-│   └── scraper.db
-│
-├── models/
-│   └── book.py
-│
-├── tests/
-│
-├── exports/
-├── logs/
-│
-├── Dockerfile
-├── docker-compose.yml
-├── requirements.txt
-├── README.md
-└── .env.example
-```
----
-
-## 🏗 Architecture
-
-The project follows a modular and layered architecture.
-
-```text
-CLI / Scheduler
-        │
-        ▼
-Application Pipeline
-        │
-        ▼
-Scrapers
-        │
-        ▼
-Storage Services
-        │
-        ▼
-Database
-        │
-        ▼
-Analytics / Export
-```
-
-Each layer has a single responsibility, making the project easy to maintain and extend.
-
----
-
-## 🛠 Technologies
-
-- Python 3.14
-- BeautifulSoup4
-- Requests
-- SQLAlchemy (Async)
-- SQLite
-- Pandas
-- OpenPyXL
-- Docker
-- Docker Compose
-- Pytest
-
----
-
-## ✅ Testing
-
-Run all tests:
+Run test suite:
 
 ```bash
-pytest
+pytest -q
 ```
 
-Current test coverage includes:
+Current test result:
 
-- Scraper
+```
+11 passed
+```
+
+Tests include:
+
 - HTTP Client
+- Scraper Parser
+- Pagination
 - Storage Service
 - Analytics Service
+- CSV Export
+- Excel Export
+- JSON Export
 
-Example:
+---
 
-```text
-========================
-5 passed in 0.42s
-========================
+# 📈 Example Output
+
 ```
----
+Total books: 1000
 
-## 🚀 Roadmap
+Average price: £35.07
 
-Future improvements planned for this template:
+Most expensive:
+The Perfect Play (Play by Play #1)
+£59.99
 
-- [ ] Support multiple websites
-- [ ] JSON Export
-- [ ] REST API integration
-- [ ] PostgreSQL support
-- [ ] Redis caching
-- [ ] Parallel scraping
-- [ ] HTML reports
-- [ ] Performance metrics
+Cheapest:
+An Abundance of Katherines
+£10.00
 
----
 
-## 🧩 Using this as a Template
+CSV exported successfully
 
-This project was designed to be reusable.
+Excel exported successfully
 
-To scrape a new website:
-
-1. Create a new scraper inside the `scrapers/` package.
-2. Implement the `parse()` method.
-3. Create or update the corresponding data model.
-4. Run:
-
-```bash
-python cli.py scrape
+JSON exported successfully
 ```
 
-The rest of the pipeline (storage, analytics, export, logging, scheduler, Docker, CLI) will continue to work without modification.
+---
+
+# 🚀 Future Improvements
+
+Planned improvements:
+
+- PostgreSQL support
+- Redis caching
+- Parallel scraping workers
+- REST API integration
+- Web dashboard
+- Advanced monitoring
+- Distributed scraping architecture
 
 ---
 
-## 🤝 Contributing
+# 👨‍💻 Author
 
-Contributions, issues, and feature requests are welcome.
+Mohammad Amin
 
-Feel free to fork the project and submit a pull request.
+Python Developer
 
----
-
-## 📄 License
-
-This project is released under the MIT License.
+Built with Python and modern backend development practices.
