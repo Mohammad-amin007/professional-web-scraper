@@ -129,9 +129,9 @@ class HttpClient:
 
 
 
-        logger.exception(
+        logger.error(
             "HTTP request failed after all retries."
-        )
+        )   
 
 
         raise last_exception

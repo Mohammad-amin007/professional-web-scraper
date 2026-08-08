@@ -16,10 +16,26 @@ class BookModel(Base):
     title: Mapped[str] = mapped_column(
         String(300),
         nullable=False,
-        unique=True,
     )
 
     price: Mapped[float] = mapped_column(
         Float,
         nullable=False,
+    )
+
+    availability: Mapped[str] = mapped_column(
+        String(100),
+        nullable=False,
+    )
+
+    rating: Mapped[int] = mapped_column(
+        Integer,
+        nullable=False,
+    )
+
+    product_url: Mapped[str] = mapped_column(
+        String(500),
+        nullable=False,
+        unique=True,
+        index=True,
     )

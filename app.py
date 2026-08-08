@@ -169,6 +169,10 @@ async def run_pipeline():
                 all_books
             )
 
+            json_file = export_service.export_json(
+                all_books
+            )
+
 
 
             print("\nExport")
@@ -182,6 +186,10 @@ async def run_pipeline():
 
             print(
                 f"Excel: {excel_file}"
+            )
+
+            print(
+                f"JSON: {json_file}"
             )
 
 
